@@ -1,0 +1,233 @@
+[tool.poetry]
+name = "sit-liveclip"
+version = "0.1.0"
+description = ""
+license = "MIT"
+authors = ["Tho Nguyen <ndtho8205@gmail.com>"]
+readme = "README.md"
+repository = "https://github.com/ndtho8205/sit-liveclip/"
+homepage = "https://github.com/ndtho8205/sit-liveclip/"
+
+[tool.poetry.dependencies]
+python = "^3.9,<3.10"
+
+numpy = "^1.22.3"
+matplotlib = "^3.5.2"
+scikit-learn = "^1.1.0"
+scipy = "^1.8.0"
+
+tensorflow = "^2.8.0"
+torch = "^1.11.0"
+tianshou = "^0.4.8"
+
+gym = "<0.22"
+
+pydot = "^1.4.2"
+graphviz = "^0.20"
+wandb = "^0.12.16"
+
+requests = "^2.27.1"
+pydantic = "^1.9.0"
+rich = {extras = ["jupyter"], version = "^12.4.1"}
+Flask = "^2.1.2"
+
+[tool.poetry.dev-dependencies]
+pdoc3 = "^0.10.0"
+
+mypy = "^0.950"
+black = "^22.3.0"
+isort = "^5.10.1"
+pylint = "^2.13.9"
+safety = "^1.10.3"
+pyupgrade = "^2.32.1"
+pre-commit = "^2.19.0"
+
+flake8 = "^4.0.1"
+flake8-aaa = "^0.12.2"
+flake8-bandit = "^3.0.0"
+flake8-bugbear = "^22.4.25"
+flake8-builtins = "^1.5.3"
+flake8-simplify = "^0.19.2"
+flake8-eradicate = "^1.2.1"
+flake8-docstrings = "^1.6.0"
+flake8-pytest-style = "^1.6.0"
+flake8-type-checking = "^1.5.0"
+flake8-comprehensions = "^3.9.0"
+flake8-rst-docstrings = "^0.2.5"
+darglint = "^1.8.1"
+pep8-naming = "^0.12.1"
+
+pytest = "^7.1.2"
+pytest-cov = "^3.0.0"
+pytest-mock = "^3.7.0"
+pytest-randomly = "^3.12.0"
+pytest-benchmark = "^3.4.1"
+hypothesis = {extras = ["numpy"], version = "^6.46.5"}
+
+jupyterlab = "^3.4.2"
+jupytext = "^1.13.8"
+jupyterlab-lsp = "^3.10.1"
+python-lsp-server = "^1.4.1"
+ipywidgets = "^7.7.0"
+jupyterlab-code-formatter = "^1.4.11"
+lckr-jupyterlab-variableinspector = "^3.0.9"
+aquirdturtle-collapsible-headings = "^3.1.0"
+
+types-requests = "^2.27.26"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+liveclip = "sit_liveclip:cli.main"
+
+[tool.mypy]
+python_version = "3.10"
+
+# disallow dynamic typing
+disallow_any_explicit = false
+disallow_any_generics = true
+
+# untyped definitions and calls
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+
+# none and optional handling
+no_implicit_optional = true
+strict_optional = true
+
+# configuring warnings
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_return_any = true
+warn_unreachable = true
+
+# miscellaneous strictness flags
+allow_redefinition = false
+implicit_reexport = false
+strict_equality = true
+
+# configuring error messages
+show_error_context = true
+show_column_numbers = true
+show_error_codes = true
+
+# advanced options
+plugins = ["numpy.typing.mypy_plugin", "pydantic.mypy"]
+
+# miscellaneous
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = [
+  "matplotlib.*",
+  "sklearn.*",
+  "tensorflow.*",
+  "gym.*",
+ ]
+ignore_missing_imports = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
+
+[tool.black]
+line-length = 90
+target-version = ["py39"]
+
+[tool.isort]
+profile = "black"
+sections = ["FUTURE", "TYPING", "STDLIB", "TEST", "THIRDPARTY", "DL", "FIRSTPARTY", "LOCALFOLDER"]
+known_typing = "typing,types,typing_extensions,mypy,mypy_extensions"
+known_test = "pytest,pytest_mock,numpy.testing,hypothesis"
+known_dl = "tensorflow,torch,torchvision,pytorch_lightning,tianshou"
+known_first_party = "sit_liveclip"
+length_sort = true
+lines_after_imports = 2
+
+[tool.pylint.MASTER]
+extension-pkg-whitelist = ["pydantic"]
+jobs = 0
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+  "missing-module-docstring",
+  "missing-function-docstring",
+  "too-few-public-methods",
+  "missing-class-docstring",
+]
+
+[tool.pylint.LOGGING]
+logging-format-style = "new"
+
+[tool.pylint.SIMILARITIES]
+min-similarity-lines = 6
+ignore-imports = "yes"
+
+[tool.pylint.VARIABLES]
+init-import = "yes"
+
+[tool.pylint.FORMAT]
+good-names = "X,x,y"
+max-line-length = 90
+
+[tool.pylint.BASIC]
+class-attribute-naming-style = "snake_case"
+
+[tool.pylint.DESIGN]
+max-args = 10
+max-parents = 10
+
+[tool.pylint.TYPECHECK]
+generated-members = ["numpy.*", "torch.*"]
+
+[tool.pytest.ini_options]
+addopts = [
+  # reporting
+  "--durations=5",
+  "-vv",
+  "--showlocals",
+  "--exitfirst",
+  "--last-failed",
+  "--color=yes",
+  # warnings
+  "--strict-config",
+  "--strict-markers",
+  # collection
+  "--ignore-glob=**/fixtures/*",
+  "--doctest-modules",
+  "--doctest-continue-on-failure",
+  # pytest-cov
+  "--cov=sit_liveclip",
+  "--cov-report=term-missing:skip-covered",
+  "--cov-config=pyproject.toml",
+  # hypothesis
+  "--hypothesis-show-statistics",
+]
+doctest_optionflags = "NUMBER IGNORE_EXCEPTION_DETAIL"
+xfail_strict = true
+markers = [
+  "slow: mark tests as slow",
+]
+testpaths = ["sit_liveclip", "tests"]
+
+[tool.coverage.run]
+branch = true
+omit = ["**/test_*"]
+relative_files = true
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "raise NotImplementedError",
+  "if TYPE_CHECKING:",
+]
+fail_under = 0
+omit = []
